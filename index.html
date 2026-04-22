@@ -1,0 +1,613 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AgriMitra AI Pro | Autonomous Farming Intelligence</title>
+    <link rel="stylesheet" href="style.css">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&family=Inter:wght@300;400;500;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+
+<body style="overflow: hidden;">
+    <!-- Auth Modal -->
+    <div id="auth-overlay" class="modal-overlay" style="display: flex; z-index: 100000; background: var(--bg-dark);">
+        <div class="auth-card glass-card" style="width: 90%; max-width: 400px; padding: 2rem;">
+            <h2 class="text-center mb-3 text-gradient"><i class="fa-solid fa-leaf"></i> AgriMitra</h2>
+            <div class="auth-tabs" style="display: flex; border-bottom: 1px solid var(--glass-border); margin-bottom: 1.5rem;">
+                <button class="auth-tab active" id="tab-login" style="flex: 1; background: transparent; border: none; color: var(--primary); padding: 1rem; font-size: 1rem; font-weight: 600; cursor: pointer; border-bottom: 2px solid var(--primary);">Login</button>
+                <button class="auth-tab" id="tab-register" style="flex: 1; background: transparent; border: none; color: var(--text-muted); padding: 1rem; font-size: 1rem; font-weight: 600; cursor: pointer; border-bottom: 2px solid transparent;">Register</button>
+            </div>
+            
+            <div id="login-form" class="auth-form active">
+                <h3 class="text-center mb-3" style="margin-bottom: 1.5rem;">Welcome Back</h3>
+                <form id="form-login">
+                    <div class="input-group">
+                        <label>Email or Phone Number</label>
+                        <input type="text" id="login-identifier" required placeholder="Enter Email or Phone">
+                    </div>
+                    <div class="input-group mt-2" style="margin-top: 1rem;">
+                        <label>Password</label>
+                        <input type="password" id="login-password" required placeholder="Enter Password">
+                    </div>
+                    <p id="login-error" class="error-msg" style="display: none; color: #ef4444; font-size: 0.85rem; margin-top: 0.5rem;"></p>
+                    <button type="submit" class="btn btn-glow full-width mt-3" style="margin-top: 1.5rem;">Login</button>
+                </form>
+            </div>
+
+            <div id="register-form" class="auth-form" style="display: none;">
+                <h3 class="text-center mb-3" style="margin-bottom: 1.5rem;">Create Account</h3>
+                <form id="form-register">
+                    <div class="input-group">
+                        <label>Full Name</label>
+                        <input type="text" id="reg-name" required placeholder="e.g. Ramesh Patel">
+                    </div>
+                    <div class="input-group mt-2" style="margin-top: 1rem;">
+                        <label>Email or Phone Number</label>
+                        <input type="text" id="reg-identifier" required placeholder="Enter Email or Phone">
+                    </div>
+                    <div class="input-group mt-2" style="margin-top: 1rem;">
+                        <label>Password</label>
+                        <input type="password" id="reg-password" required placeholder="Create Password">
+                    </div>
+                    <p id="reg-error" class="error-msg" style="display: none; color: #ef4444; font-size: 0.85rem; margin-top: 0.5rem;"></p>
+                    <button type="submit" class="btn btn-glow full-width mt-3" style="margin-top: 1.5rem;">Register</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Navbar -->
+    <nav class="navbar">
+        <div class="logo">
+            <i class="fa-solid fa-leaf text-gradient"></i> AgriMitra <span class="badge">PRO</span>
+        </div>
+        <div class="nav-links">
+            <a href="#home">Home</a>
+            <a href="#features">Features</a>
+            <a href="#architecture">Architecture</a>
+            <a href="#schemes">Schemes</a>
+            <a href="#news">News</a>
+            <a href="#demo" class="btn-primary-small">Live Demo</a>
+            <select id="language-selector" class="lang-dropdown">
+                <option value="en">English</option>
+                <option value="kn">ಕನ್ನಡ (Kannada)</option>
+                <option value="hi">हिन्दी (Hindi)</option>
+                <option value="mr">मराठी (Marathi)</option>
+                <option value="te">తెలుగు (Telugu)</option>
+            </select>
+        </div>
+        <div class="mobile-menu-btn"><i class="fa-solid fa-bars"></i></div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section id="home" class="hero section-padding">
+        <div class="particles" id="particles-js"></div>
+        <div class="hero-content reveal">
+            <h1 class="hero-title">AgriMitra <span class="text-gradient">AI Pro</span></h1>
+            <p class="hero-subtitle">Autonomous Multi-Agent AI Platform Helping Farmers Increase Yield, Detect Disease &
+                Maximize Profit.</p>
+            <div class="hero-buttons">
+                <a href="#demo" class="btn btn-glow"><i class="fa-solid fa-rocket"></i> Try Live Demo</a>
+                <a href="#architecture" class="btn btn-outline"><i class="fa-solid fa-network-wired"></i> See
+                    Architecture</a>
+            </div>
+        </div>
+        <div class="floating-elements">
+            <!-- CSS animated floating leaves/icons -->
+            <i class="fa-solid fa-seedling float-1"></i>
+            <i class="fa-solid fa-cloud-sun float-2"></i>
+            <i class="fa-solid fa-tractor float-3"></i>
+        </div>
+    </section>
+
+    <!-- Live Demo Section -->
+    <section id="demo" class="live-demo section-padding">
+        <div class="container reveal">
+            <h2 class="section-title text-center">Interactive <span class="text-gradient">Live Demo</span></h2>
+            <p class="section-desc text-center">Experience the power of autonomous AI agents.</p>
+
+            <div class="dashboard-wrapper glass-panel">
+                <div class="input-panel">
+                    <h3>Farmer Input Details</h3>
+                    <form id="ai-form">
+                        <div class="form-grid">
+                            <div class="input-group">
+                                <label>Farmer Name</label>
+                                <div class="input-with-icon">
+                                    <input type="text" id="farmerName" placeholder="e.g. Ramesh Patel" required>
+                                    <button type="button" id="voice-name-btn" class="mic-icon-btn"
+                                        title="Voice Input"><i class="fa-solid fa-microphone"></i></button>
+                                </div>
+                            </div>
+                            <div class="input-group">
+                                <label>State & District</label>
+                                <div class="input-with-icon">
+                                    <input type="text" id="location" placeholder="e.g. Maharashtra, Pune" required>
+                                    <button type="button" id="voice-loc-btn" class="mic-icon-btn" title="Voice Input"><i
+                                            class="fa-solid fa-microphone"></i></button>
+                                </div>
+                            </div>
+                            <div class="input-group">
+                                <label>Soil Type</label>
+                                <select id="soilType">
+                                    <option>Black Soil</option>
+                                    <option>Red Soil</option>
+                                    <option>Alluvial Soil</option>
+                                    <option>Clay Soil</option>
+                                </select>
+                            </div>
+                            <div class="input-group">
+                                <label>Season</label>
+                                <select id="season">
+                                    <option>Kharif (Monsoon)</option>
+                                    <option>Rabi (Winter)</option>
+                                    <option>Zaid (Summer)</option>
+                                </select>
+                            </div>
+                            <div class="input-group">
+                                <label>Crop Name</label>
+                                <div class="input-with-icon">
+                                    <input type="text" id="cropName" placeholder="e.g. Tomato, Rice" required>
+                                    <button type="button" id="voice-crop-btn" class="mic-icon-btn"
+                                        title="Voice Input"><i class="fa-solid fa-microphone"></i></button>
+                                </div>
+                            </div>
+                            <div class="input-group">
+                                <label>Problem Symptoms</label>
+                                <div class="input-with-icon">
+                                    <input type="text" id="symptoms" placeholder="e.g. yellow spots on leaves">
+                                    <button type="button" id="voice-symptoms-btn" class="mic-icon-btn"
+                                        title="Voice Input"><i class="fa-solid fa-microphone"></i></button>
+                                </div>
+                            </div>
+                            <div class="input-group">
+                                <label>Budget & Priority</label>
+                                <select id="priority">
+                                    <option>Max Profit</option>
+                                    <option>Safety First</option>
+                                    <option>Fast Growth</option>
+                                </select>
+                            </div>
+                            <div class="input-group full-width">
+                                <label data-i18n="upload_label">Upload Plant/Leaf Image or Use Camera</label>
+                                <div class="image-input-options">
+                                    <div class="file-upload-wrapper">
+                                        <input type="file" id="leafImage" accept=".jpg, .png, .jpeg">
+                                        <div class="preview-area" id="imagePreview">
+                                            <i class="fa-solid fa-cloud-arrow-up"></i>
+                                            <span data-i18n="upload_text">Click to upload or drag & drop</span>
+                                        </div>
+                                    </div>
+                                    <div class="camera-wrapper" id="open-camera-btn">
+                                        <i class="fa-solid fa-camera"></i>
+                                        <span data-i18n="open_camera">Open Camera</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <button type="submit" class="btn btn-glow full-width mt-4" id="run-agents-btn">
+                            <i class="fa-solid fa-microchip"></i> Run AI Agents
+                        </button>
+                    </form>
+                </div>
+
+                <!-- Simulation & Results Panel -->
+                <div class="results-panel" id="results-panel" style="display: none;">
+
+                    <!-- Agent Execution Simulation -->
+                    <div class="agent-simulation" id="simulation-box">
+                        <h3><i class="fa-solid fa-network-wired text-gradient"></i> AI Agents Processing...</h3>
+                        <div class="simulation-steps" id="sim-steps">
+                            <!-- Populated via JS -->
+                        </div>
+                    </div>
+
+                    <!-- Final Output Dashboard (Hidden initially) -->
+                    <div class="final-dashboard" id="final-dashboard" style="display: none;">
+                        <div class="dashboard-header">
+                            <h3><i class="fa-solid fa-clipboard-check"></i> Smart Final Report</h3>
+                            <div class="action-buttons">
+                                <button id="btn-speak" class="btn-icon" title="Speak Result"><i
+                                        class="fa-solid fa-volume-high"></i></button>
+                                <button id="btn-download" class="btn-icon" title="Download Report"><i
+                                        class="fa-solid fa-download"></i></button>
+                            </div>
+                        </div>
+
+                        <div class="dashboard-grid">
+                            <!-- Disease & Remedy -->
+                            <div class="dash-card alert-card">
+                                <h4><i class="fa-solid fa-virus"></i> Disease Detection</h4>
+                                <div id="disease-result"></div>
+                            </div>
+
+                            <!-- Remedies -->
+                            <div class="dash-card">
+                                <h4><i class="fa-solid fa-prescription-bottle-medical"></i> Treatment Plan</h4>
+                                <div id="remedy-result"></div>
+                            </div>
+
+                            <!-- Market Price -->
+                            <div class="dash-card">
+                                <h4><i class="fa-solid fa-indian-rupee-sign"></i> Live Market Prices</h4>
+                                <div id="market-result"></div>
+                            </div>
+
+                            <!-- Stores -->
+                            <div class="dash-card">
+                                <h4><i class="fa-solid fa-store"></i> Nearest Shops</h4>
+                                <div id="store-result"></div>
+                            </div>
+
+                            <!-- Schemes & Weather -->
+                            <div class="dash-card span-2 flex-row">
+                                <div class="half">
+                                    <h4><i class="fa-solid fa-map-location-dot"></i> Action Plan</h4>
+                                    <div id="roadmap-result"></div>
+                                </div>
+                                <div class="half">
+                                    <h4><i class="fa-solid fa-cloud-showers-heavy"></i> Weather Alert</h4>
+                                    <div id="weather-result"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Schemes Eligibility Section -->
+    <section id="schemes" class="section-padding">
+        <div class="container reveal">
+            <h2 class="section-title text-center">Government <span class="text-gradient">Schemes Eligibility</span></h2>
+            <p class="section-desc text-center">Check which government subsidies and schemes you are eligible for.</p>
+
+            <div class="dashboard-wrapper glass-panel" style="max-width: 800px; margin: 0 auto;">
+                <form id="schemes-form" class="form-grid" style="grid-template-columns: 1fr 1fr; margin-bottom: 2rem;">
+                    <div class="input-group">
+                        <label>Education Qualification</label>
+                        <select id="education">
+                            <option>10th Pass / Below</option>
+                            <option>12th Pass</option>
+                            <option>Graduate (Agriculture)</option>
+                            <option>Graduate (Other)</option>
+                        </select>
+                    </div>
+                    <div class="input-group">
+                        <label>Current Working Status</label>
+                        <select id="working">
+                            <option>Full-time Farmer</option>
+                            <option>Agri-Business / Startup</option>
+                            <option>Student</option>
+                            <option>Unemployed</option>
+                        </select>
+                    </div>
+                    <div class="input-group">
+                        <label>Annual Income</label>
+                        <select id="income">
+                            <option>Below ₹1 Lakh</option>
+                            <option>₹1 Lakh - ₹3 Lakh</option>
+                            <option>Above ₹3 Lakh</option>
+                        </select>
+                    </div>
+                    <div class="input-group">
+                        <label>Land Size (Acres)</label>
+                        <select id="land-size">
+                            <option>Less than 2 Acres (Small/Marginal)</option>
+                            <option>2 - 5 Acres</option>
+                            <option>More than 5 Acres</option>
+                        </select>
+                    </div>
+                    <div class="input-group">
+                        <label>Social Category</label>
+                        <select id="category">
+                            <option>General</option>
+                            <option>OBC</option>
+                            <option>SC / ST</option>
+                        </select>
+                    </div>
+                    <div class="input-group full-width">
+                        <button type="submit" class="btn btn-glow full-width"><i
+                                class="fa-solid fa-magnifying-glass"></i> Find Eligible Schemes</button>
+                    </div>
+                </form>
+
+                <div id="schemes-results" style="display: none;">
+                    <h3 style="margin-bottom: 1rem; color: var(--primary)"><i class="fa-solid fa-list-check"></i>
+                        Recommended For You</h3>
+                    <div class="grid grid-2" id="schemes-grid">
+                        <!-- Populated by JS -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Farming News Section -->
+    <section id="news" class="section-padding bg-darker">
+        <div class="container reveal">
+            <h2 class="section-title text-center">Recent <span class="text-gradient">Farming News</span></h2>
+            <p class="section-desc text-center">Stay updated with the latest agricultural trends and techniques.</p>
+
+            <div class="grid grid-3">
+                <a href="https://www.youtube.com/results?search_query=modern+drone+farming+india" target="_blank"
+                    class="video-card glass-card hover-lift"
+                    style="padding: 0; overflow: hidden; text-decoration: none; color: inherit; display: block;">
+                    <div class="video-thumbnail"
+                        style="background-image: url('https://images.unsplash.com/photo-1592982537447-6f2c6a0c5980?w=500&q=80'); height: 200px; background-size: cover; background-position: center; position: relative; display: flex; align-items: center; justify-content: center;">
+                        <div class="play-btn-overlay"
+                            style="width: 50px; height: 50px; background: rgba(255,0,0,0.8); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-size: 1.5rem; transition: transform 0.3s;">
+                            <i class="fa-solid fa-play" style="margin-left: 4px;"></i>
+                        </div>
+                    </div>
+                    <div style="padding: 1.2rem;">
+                        <h4 style="margin-bottom: 0.5rem; font-size: 1.1rem; color: var(--text-main);">Modern Drone
+                            Spraying</h4>
+                        <p style="font-size: 0.85rem; color: var(--text-muted)">See how drones are revolutionizing
+                            pesticide application across India.</p>
+                    </div>
+                </a>
+                <a href="https://www.youtube.com/results?search_query=hydroponics+farming+success+story" target="_blank"
+                    class="video-card glass-card hover-lift"
+                    style="padding: 0; overflow: hidden; text-decoration: none; color: inherit; display: block;">
+                    <div class="video-thumbnail"
+                        style="background-image: url('https://images.unsplash.com/photo-1550989460-0adf9ea622e2?w=500&q=80'); height: 200px; background-size: cover; background-position: center; position: relative; display: flex; align-items: center; justify-content: center;">
+                        <div class="play-btn-overlay"
+                            style="width: 50px; height: 50px; background: rgba(255,0,0,0.8); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-size: 1.5rem; transition: transform 0.3s;">
+                            <i class="fa-solid fa-play" style="margin-left: 4px;"></i>
+                        </div>
+                    </div>
+                    <div style="padding: 1.2rem;">
+                        <h4 style="margin-bottom: 0.5rem; font-size: 1.1rem; color: var(--text-main);">Hydroponics &
+                            Vertical Farming</h4>
+                        <p style="font-size: 0.85rem; color: var(--text-muted)">Maximize your yield with zero soil and
+                            90% less water usage.</p>
+                    </div>
+                </a>
+                <a href="https://www.youtube.com/results?search_query=pm+kisan+yojana+explained" target="_blank"
+                    class="video-card glass-card hover-lift"
+                    style="padding: 0; overflow: hidden; text-decoration: none; color: inherit; display: block;">
+                    <div class="video-thumbnail"
+                        style="background-image: url('https://images.unsplash.com/photo-1598514982205-f36b96d1e8d4?w=500&q=80'); height: 200px; background-size: cover; background-position: center; position: relative; display: flex; align-items: center; justify-content: center;">
+                        <div class="play-btn-overlay"
+                            style="width: 50px; height: 50px; background: rgba(255,0,0,0.8); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-size: 1.5rem; transition: transform 0.3s;">
+                            <i class="fa-solid fa-play" style="margin-left: 4px;"></i>
+                        </div>
+                    </div>
+                    <div style="padding: 1.2rem;">
+                        <h4 style="margin-bottom: 0.5rem; font-size: 1.1rem; color: var(--text-main);">Govt Subsidies
+                            2026 Explained</h4>
+                        <p style="font-size: 0.85rem; color: var(--text-muted)">Step-by-step guide to claiming your
+                            PM-Kisan and tractor subsidies.</p>
+                    </div>
+                </a>
+                <a href="https://www.youtube.com/results?search_query=desi+jugaad+farming+india" target="_blank"
+                    class="video-card glass-card hover-lift"
+                    style="padding: 0; overflow: hidden; text-decoration: none; color: inherit; display: block;">
+                    <div class="video-thumbnail"
+                        style="background-image: url('https://images.unsplash.com/photo-1595844730298-b860268686cb?w=500&q=80'); height: 200px; background-size: cover; background-position: center; position: relative; display: flex; align-items: center; justify-content: center;">
+                        <div class="play-btn-overlay"
+                            style="width: 50px; height: 50px; background: rgba(255,0,0,0.8); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-size: 1.5rem; transition: transform 0.3s;">
+                            <i class="fa-solid fa-play" style="margin-left: 4px;"></i>
+                        </div>
+                    </div>
+                    <div style="padding: 1.2rem;">
+                        <h4 style="margin-bottom: 0.5rem; font-size: 1.1rem; color: var(--text-main);">Desi Jugaad
+                            Innovations</h4>
+                        <p style="font-size: 0.85rem; color: var(--text-muted)">Low-cost local farming innovations
+                            saving money and time.</p>
+                    </div>
+                </a>
+                <a href="https://www.youtube.com/results?search_query=organic+farming+success+maharashtra"
+                    target="_blank" class="video-card glass-card hover-lift"
+                    style="padding: 0; overflow: hidden; text-decoration: none; color: inherit; display: block;">
+                    <div class="video-thumbnail"
+                        style="background-image: url('https://images.unsplash.com/photo-1530836369250-ef71a3f5e481?w=500&q=80'); height: 200px; background-size: cover; background-position: center; position: relative; display: flex; align-items: center; justify-content: center;">
+                        <div class="play-btn-overlay"
+                            style="width: 50px; height: 50px; background: rgba(255,0,0,0.8); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-size: 1.5rem; transition: transform 0.3s;">
+                            <i class="fa-solid fa-play" style="margin-left: 4px;"></i>
+                        </div>
+                    </div>
+                    <div style="padding: 1.2rem;">
+                        <h4 style="margin-bottom: 0.5rem; font-size: 1.1rem; color: var(--text-main);">Organic Farming
+                            Success</h4>
+                        <p style="font-size: 0.85rem; color: var(--text-muted)">A farmer from Maharashtra shares his 10x
+                            organic yield story.</p>
+                    </div>
+                </a>
+                <a href="https://www.youtube.com/results?search_query=high+yield+wheat+variety+india" target="_blank"
+                    class="video-card glass-card hover-lift"
+                    style="padding: 0; overflow: hidden; text-decoration: none; color: inherit; display: block;">
+                    <div class="video-thumbnail"
+                        style="background-image: url('https://images.unsplash.com/photo-1574323347407-f5e1ad6d020b?w=500&q=80'); height: 200px; background-size: cover; background-position: center; position: relative; display: flex; align-items: center; justify-content: center;">
+                        <div class="play-btn-overlay"
+                            style="width: 50px; height: 50px; background: rgba(255,0,0,0.8); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-size: 1.5rem; transition: transform 0.3s;">
+                            <i class="fa-solid fa-play" style="margin-left: 4px;"></i>
+                        </div>
+                    </div>
+                    <div style="padding: 1.2rem;">
+                        <h4 style="margin-bottom: 0.5rem; font-size: 1.1rem; color: var(--text-main);">High-Yield Wheat
+                            Varieties</h4>
+                        <p style="font-size: 0.85rem; color: var(--text-muted)">Explore the new climate-resilient seeds
+                            developed by ICAR.</p>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </section>
+
+
+    <!-- Pain Points Section -->
+    <section id="features" class="pain-points section-padding">
+        <div class="container text-center reveal">
+            <h2 class="section-title">Solving <span class="text-gradient">Real Farming Problems</span></h2>
+            <div class="grid grid-4">
+                <div class="glass-card hover-lift">
+                    <div class="icon-box"><i class="fa-solid fa-bug"></i></div>
+                    <h3>Pest Attack Losses</h3>
+                    <p>Early detection prevents major crop damage and financial ruin.</p>
+                </div>
+                <div class="glass-card hover-lift">
+                    <div class="icon-box"><i class="fa-solid fa-viruses"></i></div>
+                    <h3>Disease Spread</h3>
+                    <p>Stop infections before they spread across the entire farm.</p>
+                </div>
+                <div class="glass-card hover-lift">
+                    <div class="icon-box"><i class="fa-solid fa-chart-line-down"></i></div>
+                    <h3>Low Crop Prices</h3>
+                    <p>Real-time market insights to sell at the best possible price.</p>
+                </div>
+                <div class="glass-card hover-lift">
+                    <div class="icon-box"><i class="fa-solid fa-user-xmark"></i></div>
+                    <h3>Lack of Experts</h3>
+                    <p>Instant access to AI-driven agronomy advice 24/7.</p>
+                </div>
+                <div class="glass-card hover-lift">
+                    <div class="icon-box"><i class="fa-solid fa-cloud-bolt"></i></div>
+                    <h3>Climate Risk</h3>
+                    <p>Hyper-local weather alerts to protect your harvest.</p>
+                </div>
+                <div class="glass-card hover-lift">
+                    <div class="icon-box"><i class="fa-solid fa-flask"></i></div>
+                    <h3>Wrong Fertilizer Use</h3>
+                    <p>Precision chemical and organic recommendations.</p>
+                </div>
+                <div class="glass-card hover-lift">
+                    <div class="icon-box"><i class="fa-solid fa-store-slash"></i></div>
+                    <h3>Market Confusion</h3>
+                    <p>Find exact buyers and sellers without middleman chaos.</p>
+                </div>
+                <div class="glass-card hover-lift">
+                    <div class="icon-box"><i class="fa-solid fa-hourglass-empty"></i></div>
+                    <h3>Time Waste</h3>
+                    <p>Locate nearest stores and resources instantly.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Architecture Section -->
+    <section id="architecture" class="architecture section-padding bg-darker">
+        <div class="container text-center reveal">
+            <h2 class="section-title">Multi-Agent <span class="text-gradient">Architecture</span></h2>
+            <p class="section-desc">A highly coordinated swarm of specialized AI agents working for you.</p>
+
+            <div class="flow-diagram">
+                <div class="node user-node">Farmer Input</div>
+                <div class="arrow down"></div>
+                <div class="node manager-node glowing">Manager Agent</div>
+                <div class="arrow down"></div>
+                <div class="agents-grid">
+                    <div class="node agent">Weather Agent</div>
+                    <div class="node agent">Crop Agent</div>
+                    <div class="node agent">Disease Agent</div>
+                    <div class="node agent">Remedy Agent</div>
+                    <div class="node agent">Market Agent</div>
+                    <div class="node agent">Finance Agent</div>
+                    <div class="node agent">Store Agent</div>
+                </div>
+                <div class="arrow down"></div>
+                <div class="node final-node">Final AI Farming Plan</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Impact Section -->
+    <section id="impact" class="impact section-padding bg-darker">
+        <div class="container reveal">
+            <h2 class="section-title text-center">Real <span class="text-gradient">Impact</span></h2>
+            <div class="grid grid-4 counter-grid">
+                <div class="counter-card">
+                    <div class="counter" data-target="10">0</div>
+                    <p>Hours Saved Monthly</p>
+                </div>
+                <div class="counter-card">
+                    <div class="counter" data-target="25">0</div>
+                    <p>% Faster Detection</p>
+                </div>
+                <div class="counter-card">
+                    <div class="counter" data-target="20">0</div>
+                    <p>% Better Decisions</p>
+                </div>
+                <div class="counter-card">
+                    <div class="counter-prefix">Higher</div>
+                    <p>Profit Potential</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container text-center">
+            <h2 class="footer-logo"><i class="fa-solid fa-leaf text-gradient"></i> AgriMitra AI Pro</h2>
+            <p>Built for the 2026 Agentic Workflow Challenge</p>
+            <div class="social-links mt-3">
+                <a href="#"><i class="fa-brands fa-github"></i></a>
+                <a href="#"><i class="fa-brands fa-linkedin"></i></a>
+                <a href="#"><i class="fa-solid fa-globe"></i></a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Chatbot Mini Assistant -->
+    <div class="chatbot-wrapper">
+        <div class="chat-window" id="chat-window">
+            <div class="chat-header">
+                <h4>Agri Assistant</h4>
+                <button id="close-chat"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <div class="chat-body" id="chat-body">
+                <div class="message bot">Hello! I'm your farming assistant. Ask me anything about crops, diseases, or
+                    weather.</div>
+            </div>
+            <div class="chat-input-area">
+                <div class="suggested-chips">
+                    <span class="chip" onclick="askBot('Which crop is best in summer?')">Summer crops?</span>
+                    <span class="chip" onclick="askBot('How to stop pests?')">Stop pests?</span>
+                </div>
+                <div class="input-flex">
+                    <input type="text" id="chat-input" placeholder="Type a message...">
+                    <button id="voice-chat-btn" title="Voice Input"><i class="fa-solid fa-microphone"></i></button>
+                    <button id="send-chat"><i class="fa-solid fa-paper-plane"></i></button>
+                </div>
+            </div>
+        </div>
+        <button class="chat-toggle" id="chat-toggle">
+            <i class="fa-solid fa-message"></i>
+        </button>
+    </div>
+
+    <!-- Camera Modal -->
+    <div id="camera-modal" class="modal-overlay" style="display: none;">
+        <div class="camera-card glass-card">
+            <div class="modal-header">
+                <h3 data-i18n="camera_title"><i class="fa-solid fa-camera text-gradient"></i> Live Plant Scanner</h3>
+                <button id="close-camera" class="btn-icon"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <div class="video-container">
+                <video id="camera-video" autoplay playsinline></video>
+                <canvas id="camera-canvas" style="display: none;"></canvas>
+                <img id="camera-snapshot" style="display: none;" />
+            </div>
+            <div class="camera-actions">
+                <button id="capture-btn" class="btn btn-glow" data-i18n="capture_photo"><i
+                        class="fa-solid fa-camera"></i> Capture</button>
+                <button id="retake-btn" class="btn btn-outline" style="display: none;" data-i18n="retake_photo"><i
+                        class="fa-solid fa-rotate-right"></i> Retake</button>
+                <button id="use-photo-btn" class="btn btn-glow" style="display: none;" data-i18n="use_photo"><i
+                        class="fa-solid fa-check"></i> Use Photo</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+
+</html>
