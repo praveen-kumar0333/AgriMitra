@@ -65,6 +65,7 @@
         <div class="logo">
             <i class="fa-solid fa-leaf text-gradient"></i> AgriMitra <span class="badge">PRO</span>
         </div>
+        <button id="theme-toggle" class="btn-icon" style="background: transparent; border: none; font-size: 1.2rem; cursor: pointer; color: var(--text-main); margin-left: auto; margin-right: 1rem;"><i class="fa-solid fa-moon"></i></button>
         <div class="nav-links">
             <a href="#home">Home</a>
             <a href="#features">Features</a>
@@ -84,16 +85,19 @@
     </nav>
 
     <!-- Hero Section -->
-    <section id="home" class="hero section-padding">
+    <section id="home" class="hero section-padding" style="display: flex; align-items: center; min-height: 100vh;">
         <div class="particles" id="particles-js"></div>
-        <div class="hero-content reveal">
-            <h1 class="hero-title">AgriMitra <span class="text-gradient">AI Pro</span></h1>
-            <p class="hero-subtitle">Autonomous Multi-Agent AI Platform Helping Farmers Increase Yield, Detect Disease &
-                Maximize Profit.</p>
-            <div class="hero-buttons">
-                <a href="#demo" class="btn btn-glow"><i class="fa-solid fa-rocket"></i> Try Live Demo</a>
-                <a href="#architecture" class="btn btn-outline"><i class="fa-solid fa-network-wired"></i> See
-                    Architecture</a>
+        <div class="container" style="display: flex; align-items: center; justify-content: space-between; gap: 2rem; flex-wrap: wrap; position: relative; z-index: 10;">
+            <div class="hero-content reveal" style="flex: 1; min-width: 300px; text-align: left; margin: 0;">
+                <h1 class="hero-title" style="text-align: left;">AgriMitra <span class="text-gradient">AI Pro</span></h1>
+                <p class="hero-subtitle" style="text-align: left; margin-left: 0;">Autonomous Multi-Agent AI Platform Helping Farmers Increase Yield, Detect Disease & Maximize Profit.</p>
+                <div class="hero-buttons" style="justify-content: flex-start;">
+                    <a href="#demo" class="btn btn-glow"><i class="fa-solid fa-rocket"></i> Try Live Demo</a>
+                    <a href="#architecture" class="btn btn-outline"><i class="fa-solid fa-network-wired"></i> Architecture</a>
+                </div>
+            </div>
+            <div class="hero-image reveal" style="flex: 1; min-width: 300px; text-align: center;">
+                <img src="images/hero_farmer.png" alt="Modern Farmer with AI" style="width: 100%; max-width: 500px; border-radius: 20px; box-shadow: 0 20px 40px rgba(16, 185, 129, 0.2); border: 1px solid var(--glass-border);">
             </div>
         </div>
         <div class="floating-elements">
@@ -104,7 +108,106 @@
         </div>
     </section>
 
-    <!-- Live Demo Section -->
+    <!-- Dashboard Section -->
+    <section id="dashboard" class="dashboard-section section-padding" style="display: none;">
+        <div class="container reveal">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem; flex-wrap: wrap; gap: 1rem;">
+                <div style="display: flex; align-items: center; gap: 1.5rem; flex-wrap: wrap;">
+                    <h2 class="section-title" style="margin-bottom: 0;">Welcome back, <span id="dashboard-user-name" class="text-gradient">Farmer</span>!</h2>
+                    <div class="live-clock" id="live-clock" style="font-size: 1rem; padding: 0.3rem 0.8rem;">
+                        <i class="fa-regular fa-clock"></i> <span id="clock-time">--:--:--</span>
+                    </div>
+                </div>
+                <div style="display: flex; gap: 1rem;">
+                    <button id="open-history-btn" class="btn btn-outline"><i class="fa-solid fa-clock-rotate-left"></i> History</button>
+                    <button id="open-profile-btn" class="btn btn-outline"><i class="fa-solid fa-user"></i> Profile</button>
+                </div>
+            </div>
+            <div class="grid grid-4 counter-grid" style="margin-top: 0;">
+                <div class="counter-card" style="padding: 1.5rem;">
+                    <i class="fa-solid fa-cloud-sun" style="font-size: 2rem; color: #0ea5e9; margin-bottom: 1rem;"></i>
+                    <h4 style="margin-bottom: 0.5rem;">Weather</h4>
+                    <p style="font-size: 0.85rem;" id="dash-weather">Partly Cloudy, 28°C</p>
+                </div>
+                <div class="counter-card" style="padding: 1.5rem; border-color: rgba(239, 68, 68, 0.3); background: rgba(239, 68, 68, 0.05);">
+                    <i class="fa-solid fa-triangle-exclamation" style="font-size: 2rem; color: #ef4444; margin-bottom: 1rem;"></i>
+                    <h4 style="margin-bottom: 0.5rem; color: #ef4444;">Active Alerts</h4>
+                    <p style="font-size: 0.85rem;" id="dash-alerts">High risk of Aphids this week.</p>
+                </div>
+                <div class="counter-card" style="padding: 1.5rem;">
+                    <i class="fa-solid fa-seedling" style="font-size: 2rem; color: var(--primary); margin-bottom: 1rem;"></i>
+                    <h4 style="margin-bottom: 0.5rem;">Crop Status</h4>
+                    <p style="font-size: 0.85rem;" id="dash-crop-status">Vegetative Stage - Good</p>
+                </div>
+                <div class="counter-card" style="padding: 1.5rem;">
+                    <i class="fa-solid fa-lightbulb" style="font-size: 2rem; color: #f59e0b; margin-bottom: 1rem;"></i>
+                    <h4 style="margin-bottom: 0.5rem;">Tip of the Day</h4>
+                    <p style="font-size: 0.85rem;" id="dash-tip">Apply Nitrogen early morning.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Multi-Agent Selection Section -->
+    <section id="agents" class="agents-section section-padding bg-alt" style="display: none;">
+        <div class="container reveal">
+            <h2 class="section-title text-center">Choose Your <span class="text-gradient">AI Agent</span></h2>
+            <p class="section-desc text-center" style="margin-bottom: 3rem;">Select a specialized agent below to get targeted, professional assistance for your farm.</p>
+            
+            <div class="grid grid-4" id="agent-cards-container">
+                <div class="glass-card hover-lift agent-card" data-agent="crop_doctor" style="text-align: center; cursor: pointer;">
+                    <div class="icon-box"><i class="fa-solid fa-microscope"></i></div>
+                    <h3>Crop Doctor</h3>
+                    <p style="margin-bottom: 1.5rem; font-size: 0.85rem;">Diagnose diseases from symptoms.</p>
+                    <button class="btn btn-outline full-width btn-sm">Use Agent</button>
+                </div>
+                <div class="glass-card hover-lift agent-card" data-agent="weather" style="text-align: center; cursor: pointer;">
+                    <div class="icon-box" style="color: #0ea5e9;"><i class="fa-solid fa-cloud-sun-rain"></i></div>
+                    <h3>Weather Advisor</h3>
+                    <p style="margin-bottom: 1.5rem; font-size: 0.85rem;">Hyper-local forecasts & advice.</p>
+                    <button class="btn btn-outline full-width btn-sm">Use Agent</button>
+                </div>
+                <div class="glass-card hover-lift agent-card" data-agent="waste" style="text-align: center; cursor: pointer;">
+                    <div class="icon-box" style="color: #8b5cf6;"><i class="fa-solid fa-recycle"></i></div>
+                    <h3>Waste to Wealth</h3>
+                    <p style="margin-bottom: 1.5rem; font-size: 0.85rem;">Turn stubble into compost/biofuel.</p>
+                    <button class="btn btn-outline full-width btn-sm">Use Agent</button>
+                </div>
+                <div class="glass-card hover-lift agent-card" data-agent="market" style="text-align: center; cursor: pointer;">
+                    <div class="icon-box" style="color: #f59e0b;"><i class="fa-solid fa-chart-line"></i></div>
+                    <h3>Market Price</h3>
+                    <p style="margin-bottom: 1.5rem; font-size: 0.85rem;">Demand trends & predictions.</p>
+                    <button class="btn btn-outline full-width btn-sm">Use Agent</button>
+                </div>
+                <div class="glass-card hover-lift agent-card" data-agent="smart_farm" style="text-align: center; cursor: pointer;">
+                    <div class="icon-box"><i class="fa-solid fa-leaf"></i></div>
+                    <h3>Smart Farming</h3>
+                    <p style="margin-bottom: 1.5rem; font-size: 0.85rem;">Productivity & fertilizer hacks.</p>
+                    <button class="btn btn-outline full-width btn-sm">Use Agent</button>
+                </div>
+                <div class="glass-card hover-lift agent-card" data-agent="schemes" style="text-align: center; cursor: pointer;">
+                    <div class="icon-box" style="color: #ec4899;"><i class="fa-solid fa-file-invoice-dollar"></i></div>
+                    <h3>Govt Schemes</h3>
+                    <p style="margin-bottom: 1.5rem; font-size: 0.85rem;">Find subsidies & loan programs.</p>
+                    <button class="btn btn-outline full-width btn-sm">Use Agent</button>
+                </div>
+                <div class="glass-card hover-lift agent-card" data-agent="voice" style="text-align: center; cursor: pointer;">
+                    <div class="icon-box" style="color: #14b8a6;"><i class="fa-solid fa-headset"></i></div>
+                    <h3>Voice Assistant</h3>
+                    <p style="margin-bottom: 1.5rem; font-size: 0.85rem;">Talk in your local language.</p>
+                    <button class="btn btn-outline full-width btn-sm">Use Agent</button>
+                </div>
+                <div class="glass-card hover-lift agent-card" data-agent="emergency" style="text-align: center; cursor: pointer;">
+                    <div class="icon-box" style="color: #ef4444;"><i class="fa-solid fa-truck-medical"></i></div>
+                    <h3>Emergency Help</h3>
+                    <p style="margin-bottom: 1.5rem; font-size: 0.85rem;">Urgent response for pests/floods.</p>
+                    <button class="btn btn-outline full-width btn-sm">Use Agent</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Live Demo Section (Original Flow) -->
     <section id="demo" class="live-demo section-padding">
         <div class="container reveal">
             <h2 class="section-title text-center">Interactive <span class="text-gradient">Live Demo</span></h2>
@@ -605,7 +708,103 @@
                         class="fa-solid fa-check"></i> Use Photo</button>
             </div>
         </div>
+        </div>
     </div>
+
+    <!-- Farmer Profile Modal -->
+    <div id="profile-modal" class="modal-overlay" style="display: none;">
+        <div class="camera-card glass-card" style="max-width: 500px;">
+            <div class="modal-header">
+                <h3><i class="fa-solid fa-user text-gradient"></i> Farmer Profile</h3>
+                <button id="close-profile" class="btn-icon"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <form id="profile-form" style="display: flex; flex-direction: column; gap: 1rem; margin-top: 1rem;">
+                <div class="input-group">
+                    <label>Full Name</label>
+                    <input type="text" id="prof-name" required>
+                </div>
+                <div class="input-group">
+                    <label>Location (State, District)</label>
+                    <input type="text" id="prof-location" required>
+                </div>
+                <div class="input-group">
+                    <label>Preferred Language</label>
+                    <select id="prof-lang">
+                        <option value="en">English</option>
+                        <option value="hi">Hindi</option>
+                        <option value="mr">Marathi</option>
+                        <option value="kn">Kannada</option>
+                        <option value="te">Telugu</option>
+                    </select>
+                </div>
+                <div class="input-group">
+                    <label>Farm Size (Acres)</label>
+                    <input type="number" id="prof-size" step="0.1" required>
+                </div>
+                <div class="input-group">
+                    <label>Primary Crops</label>
+                    <input type="text" id="prof-crops" placeholder="e.g. Cotton, Soyabean" required>
+                </div>
+                <button type="submit" class="btn btn-glow mt-3">Save Profile</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Unified Agent Interaction Modal -->
+    <div id="agent-modal" class="modal-overlay" style="display: none; align-items: stretch; padding: 2rem;">
+        <div class="glass-card agent-interaction-container" style="display: flex; width: 100%; max-width: 1000px; padding: 0; overflow: hidden; background: var(--bg-main);">
+            
+            <!-- Sidebar for switching agents -->
+            <div class="agent-sidebar" style="width: 250px; background: var(--bg-alt); border-right: 1px solid var(--glass-border); padding: 1.5rem; display: flex; flex-direction: column; overflow-y: auto;">
+                <h4 style="margin-bottom: 1.5rem; color: var(--text-muted);">Switch Agent</h4>
+                <div class="agent-switch-list" id="agent-switch-list" style="display: flex; flex-direction: column; gap: 0.5rem;">
+                    <!-- Populated by JS -->
+                </div>
+                <hr style="border: 0; border-top: 1px solid var(--glass-border); margin: 2rem 0;">
+                <button id="agent-modal-close" class="btn btn-outline full-width"><i class="fa-solid fa-arrow-left"></i> Back to Home</button>
+            </div>
+
+            <!-- Main Agent Area -->
+            <div class="agent-main-area" style="flex: 1; padding: 2rem; display: flex; flex-direction: column; position: relative; overflow-y: auto;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem; border-bottom: 1px solid var(--glass-border); padding-bottom: 1rem;">
+                    <h2 id="active-agent-title"><i class="fa-solid fa-robot"></i> Agent Name</h2>
+                    <button class="btn-icon" id="btn-favorite" title="Favorite this response"><i class="fa-regular fa-star"></i></button>
+                </div>
+
+                <!-- Dynamic Form Area -->
+                <div id="agent-dynamic-form-area" style="margin-bottom: 2rem;">
+                    <!-- JS injects form fields based on active agent -->
+                </div>
+
+                <!-- Generating Loader -->
+                <div id="agent-loader" style="display: none; text-align: center; padding: 2rem;">
+                    <i class="fa-solid fa-circle-notch fa-spin text-gradient" style="font-size: 3rem; margin-bottom: 1rem;"></i>
+                    <p>Agent is analyzing...</p>
+                </div>
+
+                <!-- Result Area -->
+                <div id="agent-result-area" class="dash-card" style="display: none;">
+                    <!-- JS injects result here -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- History / Favorites Modal -->
+    <div id="history-modal" class="modal-overlay" style="display: none;">
+        <div class="camera-card glass-card" style="max-width: 600px; max-height: 80vh; display: flex; flex-direction: column;">
+            <div class="modal-header">
+                <h3><i class="fa-solid fa-clock-rotate-left text-gradient"></i> Saved History</h3>
+                <button id="close-history" class="btn-icon"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <div class="history-list" id="history-list" style="overflow-y: auto; flex: 1; margin-top: 1rem; display: flex; flex-direction: column; gap: 1rem;">
+                <!-- Populated by JS -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Notifications Container -->
+    <div id="toast-container" style="position: fixed; bottom: 20px; left: 20px; z-index: 99999; display: flex; flex-direction: column; gap: 10px;"></div>
 
     <script src="script.js"></script>
 </body>
