@@ -1,5 +1,16 @@
 document.addEventListener('DOMContentLoaded', () => {
 
+    // --- Live Clock ---
+    const clockTime = document.getElementById('clock-time');
+    if (clockTime) {
+        function updateClock() {
+            const now = new Date();
+            clockTime.innerText = now.toLocaleTimeString('en-US', { hour12: true, hour: '2-digit', minute: '2-digit', second: '2-digit' });
+        }
+        setInterval(updateClock, 1000);
+        updateClock(); // Initial call
+    }
+
     // --- Scroll Reveal Animation ---
     const revealElements = document.querySelectorAll('.reveal');
     const revealOptions = { threshold: 0.1, rootMargin: "0px 0px -50px 0px" };
@@ -923,35 +934,35 @@ document.addEventListener('DOMContentLoaded', () => {
     // Check if already logged in
     const isLoggedIn = localStorage.getItem('agriMitra_isLoggedIn');
     if (isLoggedIn === 'true') {
-        if(authOverlay) authOverlay.style.display = 'none';
+        if (authOverlay) authOverlay.style.display = 'none';
         document.body.style.overflow = 'auto';
-        
+
         // Auto populate name if available
         const currentUser = localStorage.getItem('agriMitra_currentUser');
-        if(currentUser) {
+        if (currentUser) {
             const userDataStr = localStorage.getItem('agriMitra_user_' + currentUser);
-            if(userDataStr) {
+            if (userDataStr) {
                 try {
                     const userData = JSON.parse(userDataStr);
                     const farmerNameInput = document.getElementById('farmerName');
-                    if(farmerNameInput && !farmerNameInput.value) {
+                    if (farmerNameInput && !farmerNameInput.value) {
                         farmerNameInput.value = userData.name;
                     }
-                } catch(e) {}
+                } catch (e) { }
             }
         }
     }
 
-    if(tabLogin && tabRegister) {
+    if (tabLogin && tabRegister) {
         tabLogin.addEventListener('click', () => {
             tabLogin.classList.add('active');
             tabLogin.style.borderBottomColor = 'var(--primary)';
             tabLogin.style.color = 'var(--primary)';
-            
+
             tabRegister.classList.remove('active');
             tabRegister.style.borderBottomColor = 'transparent';
             tabRegister.style.color = 'var(--text-muted)';
-            
+
             loginForm.style.display = 'block';
             registerForm.style.display = 'none';
         });
@@ -960,24 +971,24 @@ document.addEventListener('DOMContentLoaded', () => {
             tabRegister.classList.add('active');
             tabRegister.style.borderBottomColor = 'var(--primary)';
             tabRegister.style.color = 'var(--primary)';
-            
+
             tabLogin.classList.remove('active');
             tabLogin.style.borderBottomColor = 'transparent';
             tabLogin.style.color = 'var(--text-muted)';
-            
+
             registerForm.style.display = 'block';
             loginForm.style.display = 'none';
         });
     }
 
-    if(formRegister) {
+    if (formRegister) {
         formRegister.addEventListener('submit', (e) => {
             e.preventDefault();
             const name = document.getElementById('reg-name').value;
             const identifier = document.getElementById('reg-identifier').value;
             const password = document.getElementById('reg-password').value;
 
-            if(localStorage.getItem('agriMitra_user_' + identifier)) {
+            if (localStorage.getItem('agriMitra_user_' + identifier)) {
                 regError.innerText = 'User with this Email/Phone already exists.';
                 regError.style.display = 'block';
                 return;
@@ -989,20 +1000,20 @@ document.addEventListener('DOMContentLoaded', () => {
                 password: password
             };
             localStorage.setItem('agriMitra_user_' + identifier, JSON.stringify(userData));
-            
+
             // Auto-login after registration
             localStorage.setItem('agriMitra_isLoggedIn', 'true');
             localStorage.setItem('agriMitra_currentUser', identifier);
-            
+
             const farmerNameInput = document.getElementById('farmerName');
-            if(farmerNameInput) farmerNameInput.value = name;
-            
+            if (farmerNameInput) farmerNameInput.value = name;
+
             authOverlay.style.display = 'none';
             document.body.style.overflow = 'auto';
         });
     }
 
-    if(formLogin) {
+    if (formLogin) {
         formLogin.addEventListener('submit', (e) => {
             e.preventDefault();
             const identifier = document.getElementById('login-identifier').value;
@@ -1024,12 +1035,360 @@ document.addEventListener('DOMContentLoaded', () => {
 
             localStorage.setItem('agriMitra_isLoggedIn', 'true');
             localStorage.setItem('agriMitra_currentUser', identifier);
-            
+
             const farmerNameInput = document.getElementById('farmerName');
-            if(farmerNameInput) farmerNameInput.value = userData.name;
-            
+            if (farmerNameInput) farmerNameInput.value = userData.name;
+
             authOverlay.style.display = 'none';
             document.body.style.overflow = 'auto';
+        });
+    }
+    window.showToast = function (msg, type = 'success') {
+        const container = document.getElementById('toast-container');
+        if (!container) return;
+        const toast = document.createElement('div');
+        toast.className = `toast toast-${type}`;
+
+        let icon = 'fa-circle-check';
+        if (type === 'error') icon = 'fa-triangle-exclamation';
+        if (type === 'info') icon = 'fa-circle-info';
+        if (type === 'warning') icon = 'fa-circle-exclamation';
+
+        toast.innerHTML = `<i class="fa-solid ${icon}"></i> <span>${msg}</span>`;
+        container.appendChild(toast);
+        setTimeout(() => {
+            toast.style.animation = 'fadeOut 0.3s ease forwards';
+            setTimeout(() => toast.remove(), 300);
+        }, 3000);
+    }
+
+    const themeToggleBtn = document.getElementById('theme-toggle');
+    if (themeToggleBtn) {
+        if (localStorage.getItem('agriMitra_theme') === 'dark') {
+            document.body.classList.add('dark-theme');
+            themeToggleBtn.innerHTML = '<i class="fa-solid fa-sun"></i>';
+        }
+        themeToggleBtn.addEventListener('click', () => {
+            document.body.classList.toggle('dark-theme');
+            if (document.body.classList.contains('dark-theme')) {
+                localStorage.setItem('agriMitra_theme', 'dark');
+                themeToggleBtn.innerHTML = '<i class="fa-solid fa-sun"></i>';
+                showToast('Dark mode enabled', 'info');
+            } else {
+                localStorage.setItem('agriMitra_theme', 'light');
+                themeToggleBtn.innerHTML = '<i class="fa-solid fa-moon"></i>';
+                showToast('Light mode enabled', 'info');
+            }
+        });
+    }
+
+    const dashboardSection = document.getElementById('dashboard');
+    const agentsSection = document.getElementById('agents');
+    const dashUserName = document.getElementById('dashboard-user-name');
+
+    function updateSaaSUI() {
+        const isLoggedInCheck = localStorage.getItem('agriMitra_isLoggedIn');
+        if (isLoggedInCheck === 'true') {
+            if (dashboardSection) dashboardSection.style.display = 'block';
+            if (agentsSection) agentsSection.style.display = 'block';
+
+            const profileStr = localStorage.getItem('agriMitra_profile');
+            let profileData = profileStr ? JSON.parse(profileStr) : null;
+
+            if (profileData && dashUserName) {
+                dashUserName.innerText = profileData.name.split(' ')[0];
+            } else if (dashUserName) {
+                const curUser = localStorage.getItem('agriMitra_currentUser');
+                if (curUser) {
+                    const udStr = localStorage.getItem('agriMitra_user_' + curUser);
+                    if (udStr) dashUserName.innerText = JSON.parse(udStr).name.split(' ')[0];
+                }
+            }
+        }
+    }
+
+    updateSaaSUI();
+
+    if (formLogin) {
+        formLogin.addEventListener('submit', () => { setTimeout(updateSaaSUI, 100); });
+    }
+    if (formRegister) {
+        formRegister.addEventListener('submit', () => { setTimeout(updateSaaSUI, 100); });
+    }
+
+    const profileModal = document.getElementById('profile-modal');
+    const openProfileBtn = document.getElementById('open-profile-btn');
+    const closeProfileBtn = document.getElementById('close-profile');
+    const profileForm = document.getElementById('profile-form');
+
+    if (openProfileBtn) {
+        openProfileBtn.addEventListener('click', () => {
+            const profileStr = localStorage.getItem('agriMitra_profile');
+            if (profileStr) {
+                const data = JSON.parse(profileStr);
+                document.getElementById('prof-name').value = data.name || '';
+                document.getElementById('prof-location').value = data.location || '';
+                document.getElementById('prof-lang').value = data.lang || 'en';
+                document.getElementById('prof-size').value = data.size || '';
+                document.getElementById('prof-crops').value = data.crops || '';
+            } else {
+                const curUser = localStorage.getItem('agriMitra_currentUser');
+                if (curUser) {
+                    const udStr = localStorage.getItem('agriMitra_user_' + curUser);
+                    if (udStr) document.getElementById('prof-name').value = JSON.parse(udStr).name;
+                }
+            }
+            profileModal.style.display = 'flex';
+        });
+    }
+
+    if (closeProfileBtn) {
+        closeProfileBtn.addEventListener('click', () => {
+            profileModal.style.display = 'none';
+        });
+    }
+
+    if (profileForm) {
+        profileForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const data = {
+                name: document.getElementById('prof-name').value,
+                location: document.getElementById('prof-location').value,
+                lang: document.getElementById('prof-lang').value,
+                size: document.getElementById('prof-size').value,
+                crops: document.getElementById('prof-crops').value
+            };
+            localStorage.setItem('agriMitra_profile', JSON.stringify(data));
+            profileModal.style.display = 'none';
+            updateSaaSUI();
+            showToast('Profile updated successfully!', 'success');
+        });
+    }
+
+    const agentModal = document.getElementById('agent-modal');
+    const closeAgentModal = document.getElementById('agent-modal-close');
+    const agentCards = document.querySelectorAll('.agent-card');
+    const agentSidebarList = document.getElementById('agent-switch-list');
+    const activeAgentTitle = document.getElementById('active-agent-title');
+    const agentDynamicFormArea = document.getElementById('agent-dynamic-form-area');
+    const agentResultArea = document.getElementById('agent-result-area');
+    const agentLoader = document.getElementById('agent-loader');
+
+    let currentAgent = null;
+
+    const agentDefinitions = {
+        'crop_doctor': {
+            title: 'Crop Doctor',
+            icon: 'fa-microscope',
+            fields: [
+                { id: 'cd-crop', label: 'Crop Name', type: 'text', placeholder: 'e.g. Tomato' },
+                { id: 'cd-symptoms', label: 'Symptoms', type: 'text', placeholder: 'e.g. Yellowing leaves, spots' }
+            ],
+            generate: (data) => `<strong>Probable Issue:</strong> Early Blight (Fungal Disease)<br><strong>Treatment:</strong> Apply Chlorothalonil or Copper-based fungicides. Ensure proper spacing for air circulation.<br><strong>Prevention:</strong> Rotate crops and avoid overhead watering.`
+        },
+        'weather': {
+            title: 'Weather Advisor',
+            icon: 'fa-cloud-sun-rain',
+            fields: [
+                { id: 'wa-location', label: 'Location', type: 'text', placeholder: 'e.g. Pune' }
+            ],
+            generate: (data) => `<strong>Current Weather:</strong> 28°C, Partly Cloudy<br><strong>Forecast (Next 5 Days):</strong> Light showers expected on Day 3.<br><strong>Advice:</strong> Hold off on spraying pesticides until after the rain passes.`
+        },
+        'waste': {
+            title: 'Waste to Wealth',
+            icon: 'fa-recycle',
+            fields: [
+                { id: 'ww-crop', label: 'Harvested Crop', type: 'text', placeholder: 'e.g. Wheat' },
+                { id: 'ww-waste', label: 'Waste Type', type: 'text', placeholder: 'e.g. Stubble' }
+            ],
+            generate: (data) => `<strong>Compost Idea:</strong> Treat stubble with microbial decomposers to create nutrient-rich compost in 45 days.<br><strong>Biofuel:</strong> Sell to local biomass plants for extra income. Average rate: ₹2000/ton.`
+        },
+        'market': {
+            title: 'Market Price',
+            icon: 'fa-chart-line',
+            fields: [
+                { id: 'mp-crop', label: 'Crop Name', type: 'text', placeholder: 'e.g. Onion' },
+                { id: 'mp-market', label: 'Nearby Mandi', type: 'text', placeholder: 'e.g. Lasalgaon' }
+            ],
+            generate: (data) => `<strong>Estimated Price:</strong> ₹2500 - ₹3000 per Quintal.<br><strong>Trend:</strong> Prices are rising due to supply shortage.<br><strong>Advice:</strong> Sell 50% now and hold 50% for next week's predicted peak.`
+        },
+        'smart_farm': {
+            title: 'Smart Farming',
+            icon: 'fa-leaf',
+            fields: [
+                { id: 'sf-crop', label: 'Crop', type: 'text', placeholder: 'e.g. Cotton' },
+                { id: 'sf-stage', label: 'Growth Stage', type: 'text', placeholder: 'e.g. Flowering' }
+            ],
+            generate: (data) => `<strong>Fertilizer Timing:</strong> Apply NPK (19:19:19) via foliar spray this week.<br><strong>Irrigation:</strong> Maintain moderate soil moisture; avoid waterlogging during flowering.`
+        },
+        'schemes': {
+            title: 'Govt Schemes',
+            icon: 'fa-file-invoice-dollar',
+            fields: [
+                { id: 'gs-state', label: 'State', type: 'text', placeholder: 'e.g. Maharashtra' },
+                { id: 'gs-category', label: 'Category', type: 'text', placeholder: 'e.g. Small Farmer' }
+            ],
+            generate: (data) => `<strong>Eligible Schemes:</strong><br>1. PM-Kisan Samman Nidhi (₹6000/year)<br>2. PM Fasal Bima Yojana (Crop Insurance)<br><strong>Next Step:</strong> Visit nearest CSC center with Aadhar and Land Records.`
+        },
+        'voice': {
+            title: 'Voice Assistant',
+            icon: 'fa-headset',
+            fields: [
+                { id: 'va-lang', label: 'Language', type: 'select', options: ['English', 'Hindi', 'Marathi', 'Kannada'] },
+                { id: 'va-query', label: 'Ask Query', type: 'text', placeholder: 'Click the mic and speak...' }
+            ],
+            generate: (data) => `I have processed your query in ${data['va-lang']}. Based on expert agronomy data, here is your personalized advice: Maintain proper drainage and apply Neem oil as a preventive measure.`
+        },
+        'emergency': {
+            title: 'Emergency Help',
+            icon: 'fa-truck-medical',
+            fields: [
+                { id: 'em-issue', label: 'Emergency Type', type: 'text', placeholder: 'e.g. Locust Attack, Flood' }
+            ],
+            generate: (data) => `<strong>URGENT ACTION PLAN:</strong><br>1. Immediately contact local agriculture office.<br>2. Apply recommended emergency spray if pest-related.<br>3. Document damage for insurance claims via PMFBY.`
+        }
+    };
+
+    function renderAgentSidebar() {
+        if (!agentSidebarList) return;
+        agentSidebarList.innerHTML = '';
+        Object.keys(agentDefinitions).forEach(key => {
+            const def = agentDefinitions[key];
+            const btn = document.createElement('button');
+            btn.className = `btn full-width ${currentAgent === key ? 'btn-glow' : 'btn-outline'}`;
+            btn.style.textAlign = 'left';
+            btn.style.padding = '0.5rem 1rem';
+            btn.style.marginBottom = '0.5rem';
+            btn.innerHTML = `<i class="fa-solid ${def.icon}" style="width: 25px;"></i> ${def.title}`;
+            btn.onclick = () => openAgent(key);
+            agentSidebarList.appendChild(btn);
+        });
+    }
+
+    function openAgent(agentKey) {
+        currentAgent = agentKey;
+        const def = agentDefinitions[agentKey];
+        if (!def) return;
+
+        activeAgentTitle.innerHTML = `<i class="fa-solid ${def.icon}"></i> ${def.title}`;
+        agentResultArea.style.display = 'none';
+
+        let formHTML = `<form id="active-agent-form" class="agent-dynamic-form">`;
+        def.fields.forEach(f => {
+            formHTML += `<div class="input-group">
+                <label>${f.label}</label>`;
+            if (f.type === 'select') {
+                formHTML += `<select id="${f.id}">`;
+                f.options.forEach(opt => formHTML += `<option value="${opt}">${opt}</option>`);
+                formHTML += `</select>`;
+            } else {
+                formHTML += `<input type="text" id="${f.id}" placeholder="${f.placeholder}" required>`;
+            }
+            formHTML += `</div>`;
+        });
+        formHTML += `<button type="submit" class="btn btn-glow mt-3"><i class="fa-solid fa-bolt"></i> Generate Answer</button>`;
+        formHTML += `</form>`;
+
+        agentDynamicFormArea.innerHTML = formHTML;
+        renderAgentSidebar();
+
+        const currentForm = document.getElementById('active-agent-form');
+        currentForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const formData = {};
+            def.fields.forEach(f => {
+                formData[f.id] = document.getElementById(f.id).value;
+            });
+
+            agentResultArea.style.display = 'none';
+            agentLoader.style.display = 'block';
+
+            setTimeout(() => {
+                agentLoader.style.display = 'none';
+                agentResultArea.innerHTML = `<h4>AI Response:</h4><p style="margin-top: 1rem; color: var(--text-main);">${def.generate(formData)}</p>`;
+                agentResultArea.style.display = 'block';
+                showToast('Analysis complete!', 'success');
+
+                saveHistory(def.title, formData, def.generate(formData));
+            }, 1500);
+        });
+
+        agentModal.style.display = 'flex';
+        document.body.style.overflow = 'hidden';
+    }
+
+    if (agentCards) {
+        agentCards.forEach(card => {
+            card.addEventListener('click', () => {
+                const agent = card.getAttribute('data-agent');
+                openAgent(agent);
+            });
+        });
+    }
+
+    if (closeAgentModal) {
+        closeAgentModal.addEventListener('click', () => {
+            agentModal.style.display = 'none';
+            document.body.style.overflow = 'auto';
+        });
+    }
+
+    const historyModal = document.getElementById('history-modal');
+    const openHistoryBtn = document.getElementById('open-history-btn');
+    const closeHistoryBtn = document.getElementById('close-history');
+    const historyList = document.getElementById('history-list');
+
+    function saveHistory(agentTitle, inputs, result) {
+        let history = JSON.parse(localStorage.getItem('agriMitra_history') || '[]');
+        history.unshift({ agentTitle, date: new Date().toLocaleString(), inputs, result });
+        if (history.length > 20) history.pop();
+        localStorage.setItem('agriMitra_history', JSON.stringify(history));
+    }
+
+    function renderHistory() {
+        if (!historyList) return;
+        let history = JSON.parse(localStorage.getItem('agriMitra_history') || '[]');
+        if (history.length === 0) {
+            historyList.innerHTML = '<p class="text-center" style="color: var(--text-muted);">No history found.</p>';
+            return;
+        }
+
+        historyList.innerHTML = '';
+        history.forEach(item => {
+            const card = document.createElement('div');
+            card.className = 'dash-card';
+            card.innerHTML = `
+                <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
+                    <strong>${item.agentTitle}</strong>
+                    <span style="font-size: 0.8rem; color: var(--text-muted);">${item.date}</span>
+                </div>
+                <div style="font-size: 0.9rem; margin-bottom: 0.5rem; background: var(--input-bg); padding: 0.5rem; border-radius: 4px;">
+                    ${JSON.stringify(item.inputs).replace(/["{}]/g, '').replace(/:/g, ': ')}
+                </div>
+                <p style="font-size: 0.9rem;">${item.result}</p>
+            `;
+            historyList.appendChild(card);
+        });
+    }
+
+    if (openHistoryBtn) {
+        openHistoryBtn.addEventListener('click', () => {
+            renderHistory();
+            historyModal.style.display = 'flex';
+        });
+    }
+
+    if (closeHistoryBtn) {
+        closeHistoryBtn.addEventListener('click', () => {
+            historyModal.style.display = 'none';
+        });
+    }
+
+    const btnFavorite = document.getElementById('btn-favorite');
+    if (btnFavorite) {
+        btnFavorite.addEventListener('click', () => {
+            btnFavorite.innerHTML = '<i class="fa-solid fa-star" style="color: #f59e0b;"></i>';
+            showToast('Saved to favorites!', 'success');
         });
     }
 });
